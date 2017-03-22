@@ -41,9 +41,9 @@
   (comp #_(test) handler))
 (add-hook #'flow/finish-check #'finish-check)
 
-(defn master-deploy [handler _]
+(defn production-deploy [handler _]
   (comp (build-jar) (push-release) handler))
-(add-hook #'flow/master-deploy #'master-deploy)
+(add-hook #'flow/production-deploy #'production-deploy)
 
 (defn snapshot-deploy [handler _]
   (comp (build-jar) (push-snapshot) handler))
