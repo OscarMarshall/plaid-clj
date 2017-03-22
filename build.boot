@@ -35,11 +35,14 @@
        :scm         {:url "https://github.com/PennyProfit/plaid-clj"}}
  push {:repo "deploy-clojars"})
 
-(add-hook #'flow/finish-check (fn [handler _]
-                                (comp (test) handler)))
+(defn finish-check [handler _]
+  (comp #_(test) handler))
+(add-hook #'flow/finish-check #'finish-check)
 
-(add-hook #'flow/master-deploy (fn [handler _]
-                                 (comp (build-jar) (push-release) handler)))
+(defn master-deploy [handler _]
+  (comp (build-jar) (push-release) handler))
+(add-hook #'flow/master-deploy #'master-deploy)
 
-(add-hook #'flow/snapshot-deploy (fn [handler _]
-                                   (comp (build-jar) (push-snapshot) handler)))
+(defn snapshot-deploy [handler _]
+  (comp (build-jar) (push-snapshot) handler))
+(add-hook #'flow/snapshot-deploy #'snapshot-deploy)
