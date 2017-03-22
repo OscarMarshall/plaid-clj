@@ -26,10 +26,11 @@
          '[slam.hound :as slamhound]
          '[tolitius.boot-check :as check])
 
-(task-options! pom  {:project 'plaid-clj
-                     :scm     {:url "https://github.com/PennyProfit/plaid-clj"}
-                     :version (get-version)}
-               push {:repo "deploy-clojars"})
+(task-options!
+ pom  {:description "Clojure bindings for the Plaid API"
+       :project     'plaid-clj
+       :scm         {:url "https://github.com/PennyProfit/plaid-clj"}}
+ push {:repo "deploy-clojars"})
 
 (add-hook #'flow/finish-check (fn [handler _]
                                 (comp (test) handler)))
