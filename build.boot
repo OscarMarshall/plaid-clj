@@ -3,6 +3,8 @@
             [adzerk/boot-test "1.2.0" :scope "test"]
             [camel-snake-kebab "0.4.0"]
             [cheshire "5.7.0" :exclusions [org.clojure/clojure]]
+            [com.fzakaria/slf4j-timbre "0.3.4" :scope "test"]
+            [com.taoensso/timbre "4.8.0" :scope "test"]
             [http-kit "2.3.0-alpha1"]
             [inflections "0.13.0" :exclusions [org.clojure/clojure]]
             [org.clojure/clojure "1.9.0-alpha14" :scope "provided"]
