@@ -3,16 +3,6 @@
             [adzerk/boot-test "1.2.0" :scope "test"]
             [camel-snake-kebab "0.4.0"]
             [cheshire "5.7.0" :exclusions [org.clojure/clojure]]
-            [degree9/boot-semgit "0.2.1"
-             :exclusions [cheshire
-                          clj-time
-                          degree9/boot-semver
-                          org.clojure/clojure
-                          org.tcrawley/dynapath]
-             :scope "test"]
-            [degree9/boot-semver "1.4.4"
-             :exclusions [org.clojure/clojure]
-             :scope      "test"]
             [http-kit "2.3.0-alpha1"]
             [inflections "0.13.0" :exclusions [org.clojure/clojure]]
             [org.clojure/clojure "1.9.0-alpha14" :scope "provided"]
@@ -20,6 +10,7 @@
              :exclusions [org.clojure/clojure]
              :scope      "test"]
             [penny-profit/boot-flow "0.1.0-SNAPSHOT" :scope "test"]
+            [robert/hooke "1.3.0" :scope "test"]
             [slamhound "1.5.5" :exclusions [org.clojure/clojure], :scope "test"]
             [tolitius/boot-check "0.1.4"
              :exclusions [org.tcrawley/dynapath]
@@ -30,8 +21,8 @@
 
 (require '[adzerk.bootlaces :refer :all]
          '[adzerk.boot-test :refer :all]
-         '[degree9.boot-semver :refer :all]
          '[penny-profit.boot-flow :as flow]
+         '[robert.hooke :refer [add-hook]]
          '[slam.hound :as slamhound]
          '[tolitius.boot-check :as check])
 
@@ -40,16 +31,11 @@
                      :version (get-version)}
                push {:repo "deploy-clojars"})
 
-(deftask deploy
-  [t type        TYPE kw   "type of release (:major, :minor, or :patch)"
-   r release          bool "whether the pushed artifact is a release"]
-  (assert (#{:major :minor :patch} type))
-  (comp #_(test)
-        (apply version (cond-> (case type
-                                 :major [:major 'inc, :minor 'zero, :patch 'zero]
-                                 :minor [:minor 'inc, :patch 'zero]
-                                 :patch [:patch 'inc])
-                         (not release) (conj :pre-release 'snapshot
-                                             :develop     true)))
-        (build-jar)
-        (if release (push-release) (push-snapshot))))
+(add-hook #'flow/finish-check (fn [handler _]
+                                (comp (test) handler)))
+
+(add-hook #'flow/master-deploy (fn [handler _]
+                                 (comp (build-jar) (push-release) handler)))
+
+(add-hook #'flow/snapshot-deploy (fn [handler _]
+                                   (comp (build-jar) (push-snapshot) handler)))
