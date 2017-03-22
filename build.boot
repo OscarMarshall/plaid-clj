@@ -16,8 +16,11 @@
              :exclusions [org.tcrawley/dynapath]
              :scope      "test"]]
 
+          :resource-paths
+          #{"src"}
+
           :source-paths
-          #{"src" "test"})
+          #{"test"})
 
 (require '[adzerk.bootlaces :refer :all]
          '[adzerk.boot-test :refer :all]
