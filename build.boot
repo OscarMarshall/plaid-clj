@@ -19,6 +19,7 @@
             [org.clojure/test.check "0.9.0"
              :exclusions [org.clojure/clojure]
              :scope      "test"]
+            [penny-profit/boot-flow "0.1.0-SNAPSHOT" :scope "test"]
             [slamhound "1.5.5" :exclusions [org.clojure/clojure], :scope "test"]
             [tolitius/boot-check "0.1.4"
              :exclusions [org.tcrawley/dynapath]
@@ -30,6 +31,7 @@
 (require '[adzerk.bootlaces :refer :all]
          '[adzerk.boot-test :refer :all]
          '[degree9.boot-semver :refer :all]
+         '[penny-profit.boot-flow :as flow]
          '[slam.hound :as slamhound]
          '[tolitius.boot-check :as check])
 
